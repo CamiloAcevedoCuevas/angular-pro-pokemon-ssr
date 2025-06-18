@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
-import { SimplePokemon } from '../interfaces';
+import { Pokemon, SimplePokemon } from '../interfaces';
 import { PokeAPIResponse } from '../interfaces/pokemon-api.response';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PokemonsService {
   private http = inject(HttpClient);
@@ -28,7 +28,7 @@ export class PokemonsService {
           const SimplePokemons: SimplePokemon[] = resp.results.map(
             (pokemon) => ({
               id: pokemon.url.split('/').at(-2) ?? '',
-              name: pokemon.name
+              name: pokemon.name,
             })
           );
 
@@ -37,5 +37,9 @@ export class PokemonsService {
 
         // tap(console.log)
       );
+  }
+
+  public loadPokemon(id: string) {
+    return this.http.get<Pokemon>(`https://pokeapi.co/api/v2/pokemon/${id}`);
   }
 }
